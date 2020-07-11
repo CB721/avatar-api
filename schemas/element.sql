@@ -1,0 +1,4 @@
+CREATE TABLE element(
+	id SERIAL NOT NULL PRIMARY KEY
+	, ele_type VARCHAR(10) NOT NULL
+);

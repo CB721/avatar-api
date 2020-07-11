@@ -1,0 +1,4 @@
+CREATE TABLE season(
+	season_num SMALLINT NOT NULL PRIMARY KEY
+	, title VARCHAR(50) NOT NULL
+);
