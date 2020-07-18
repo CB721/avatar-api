@@ -3,10 +3,12 @@ const characters = require("./characters");
 const episodes = require("./episodes");
 const seasons = require("./seasons");
 const elements = require("./elements");
+const quotes = require("./quotes");
 
 router.use("/characters", characters);
 router.use("/episodes", episodes);
 router.use("/seasons", seasons);
 router.use("/elements", elements);
+router.use("/quotes", quotes);
 
 module.exports = router;
