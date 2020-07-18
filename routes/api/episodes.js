@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const controller = require("../../controllers/charactersController");
+const controller = require("../../controllers/episodesController");
 
 router
-    .route("/all")
+    .route("/all/:page?")
     .get(controller.all);
 router
     .route("/one/:id?")

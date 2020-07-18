@@ -14,7 +14,7 @@ module.exports = {
     // get full character information by id
     one: (req, res) => {
         const ID = req.query.id;
-        if (!ID) return res.status(400).send("Character ID required");
+        if (isNaN(ID)) return res.status(400).send("Character ID required");
         const query = {
             text: "SELECT char_name, image_link, age, (SELECT ARRAY(SELECT ele_type FROM element a, (SELECT id, can_bend FROM character) b WHERE b.can_bend @> ARRAY[a.id]::SMALLINT[] AND b.id = $1) AS elements) FROM character WHERE id = $1;",
             values: [ID]
