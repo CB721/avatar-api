@@ -2,7 +2,7 @@ const router = require("express").Router();
 const controller = require("../../controllers/charactersController");
 
 router
-    .route("/all")
+    .route("/all/:element?")
     .get(controller.all);
 router
     .route("/one/:id?")

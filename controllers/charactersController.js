@@ -3,7 +3,15 @@ const db = require("../db_connection/index");
 module.exports = {
     // get all characters by name and id
     all: (req, res) => {
-        db.query('SELECT id, char_name FROM character;', (err, data) => {
+        // option to get list of characters by element
+        const elementID = req.query.element;
+        let queryStr = "SELECT id, char_name FROM character"
+        if (elementID > 0 && elementID < 10) {
+            queryStr += ` WHERE can_bend @> ARRAY[${elementID}]::SMALLINT[];`
+        } else {
+            queryStr += ";";
+        }
+        db.query(queryStr, (err, data) => {
             if (err) {
                 return res.status(500).send(err.message);
             } else {
