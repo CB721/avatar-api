@@ -6,7 +6,7 @@ module.exports = {
         // option to get list of characters by element
         const elementID = req.query.element;
         let queryStr = "SELECT id, char_name FROM character"
-        if (elementID > 0 && elementID < 10) {
+        if (elementID && elementID > 0 && elementID < 10) {
             queryStr += ` WHERE can_bend @> ARRAY[${elementID}]::SMALLINT[];`
         } else {
             queryStr += ";";

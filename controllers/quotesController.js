@@ -39,6 +39,7 @@ module.exports = {
             // if the length is 2 it would result in $2 put into the string since it has already been add to the array
             query.text += ` AND c.fk_season = $${query.values.length}`;
         }
+        // grab a random quote from the results
         query.text += " ORDER BY RANDOM() LIMIT 1;"
         db.query(query, (err, data) => {
             if (err) {
