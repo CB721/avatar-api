@@ -1,6 +1,7 @@
 const db = require("../db_connection/index");
 
 module.exports = {
+    // create a new user
     create: (req, res) => {
         const { first_name, last_name, email } = req.body;
         // regex pattern to check for a valid email address
@@ -25,9 +26,11 @@ module.exports = {
             }
         });
     },
+    // update user information and request a new key
     update: (req, res) => {
-
+        
     },
+    // delete user
     delete: (req, res) => {
 
     }
