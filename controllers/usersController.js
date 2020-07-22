@@ -1,13 +1,14 @@
 const db = require("../db_connection/index");
+const { validateUUID, validateEmail } = require("../utils/index");
 
+// all requests to these routes must come from a whitelisted source
 module.exports = {
     // create a new user
     create: (req, res) => {
         const { first_name, last_name, email } = req.body;
-        // regex pattern to check for a valid email address
-        const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        // check if the email submitted is valid
-        if (!emailRegex.test(email)) return res.status(400).send("Invalid email");
+        validateEmail(email)
+            .then()
+            .catch(err => res.status(401).send("Invalid email"));
         // check if both a first and last name were submitted
         if (!first_name || !last_name) return res.status(400).send("First and last name are required");
         // once a user is successfully added, the generated api key will be sent back
@@ -26,9 +27,33 @@ module.exports = {
             }
         });
     },
-    // update user information and request a new key
-    update: (req, res) => {
-        
+    // specific route for requesting a new key
+    newKey: (req, res) => {
+        // since all emails will be unique, we can look up the user by email and api key
+        const { email, key } = req.body;
+        if (!email || !key) return res.status(400).send("Email and API key required");
+        // check if the key is a valid uuid
+        validateUUID(key)
+            .then()
+            .catch(err => res.status(401).send("Invalid API key"));
+        // check if email is valid
+        validateEmail(email)
+            .then()
+            .catch(err => res.status(401).send("Invalid email"));
+        // query to update the user key, it will return the new key to the user
+        const query = {
+            text: "UPDATE users SET api_key = uuid_generate_v4 () WHERE email = $1 AND api_key = $2 RETURNING api_key;",
+            values: [email, key]
+        }
+        db.query(query, (err, data) => {
+            if (err) {
+                return res.status(500).send(err.message);
+            } else if (!data.rows.length) {
+                return res.status(404).send("User not found");
+            } else {
+                return res.status(201).json(data.rows[0]);
+            }
+        })
     },
     // delete user
     delete: (req, res) => {

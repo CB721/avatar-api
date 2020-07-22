@@ -3,10 +3,8 @@ const controller = require("../../controllers/usersController");
 
 router
     .route("/create")
-    .post(controller.create);
-router
-    .route("/update/:id?")
-    .patch(controller.update);
+    .post(controller.create)
+    .patch(controller.newKey);
 router
     .route("/remove")
     .delete(controller.delete);
