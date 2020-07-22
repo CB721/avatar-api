@@ -57,6 +57,28 @@ module.exports = {
     },
     // delete user
     delete: (req, res) => {
-
+        // expecting email and api key
+        const { email, key } = req.body;
+        if (!email || !key) return res.status(400).send("Email and API key required");
+        // check if the key is a valid uuid
+        validateUUID(key)
+            .then()
+            .catch(err => res.status(401).send("Invalid API key"));
+        // check if email is valid
+        validateEmail(email)
+            .then()
+            .catch(err => res.status(401).send("Invalid email"));
+        // query to delete user
+        const query = {
+            text: "DELETE FROM users WHERE email = $1 AND api_key = $2;",
+            values: [email, key]
+        }
+        db.query(query, (err, data) => {
+            if (err) {
+                return res.status(500).send(err.message);
+            } else {
+                return res.status(204).send("User account deleted");
+            }
+        });
     }
 }
