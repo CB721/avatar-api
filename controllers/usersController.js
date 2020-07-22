@@ -32,9 +32,11 @@ module.exports = {
         // since all emails will be unique, we can look up the user by email and api key
         const { email, key } = req.body;
         if (!email || !key) return res.status(400).send("Email and API key required");
+        // add to user id when the api key is validated
+        let userID = 0;
         // check if the key is a valid uuid
         validateUUID(key)
-            .then()
+            .then(res => userID = res)
             .catch(err => res.status(401).send("Invalid API key"));
         // check if email is valid
         validateEmail(email)
@@ -42,8 +44,8 @@ module.exports = {
             .catch(err => res.status(401).send("Invalid email"));
         // query to update the user key, it will return the new key to the user
         const query = {
-            text: "UPDATE users SET api_key = uuid_generate_v4 () WHERE email = $1 AND api_key = $2 RETURNING api_key;",
-            values: [email, key]
+            text: "UPDATE users SET api_key = uuid_generate_v4 () WHERE id = $1;",
+            values: [userID]
         }
         db.query(query, (err, data) => {
             if (err) {
@@ -53,7 +55,7 @@ module.exports = {
             } else {
                 return res.status(201).json(data.rows[0]);
             }
-        })
+        });
     },
     // delete user
     delete: (req, res) => {

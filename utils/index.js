@@ -1,3 +1,4 @@
+const db = require("../db_connection/index");
 module.exports = {
     validateUUID: (uuid) => {
         return new Promise((resolve, reject) => {
@@ -7,8 +8,25 @@ module.exports = {
             const regex = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
             // if the string is not valid uuid, reject it
             if (!regex.test(uuid)) reject(false)
-            // otherwise, it is valid
-            else resolve(true);
+            // otherwise, check the database to see if one can be found
+            else {
+                // query to find the api key and return the user id
+                const query = {
+                    text: "SELECT id FROM users WHERE api_key = $1;",
+                    values: [uuid]
+                }
+                db.query(query, (err, data) => {
+                    if (err) {
+                        // if there is an error, reject it
+                        reject (false);
+                        // if no rows were found, reject it
+                    } else if (!data.rows.length) {
+                        reject (false);
+                    } else {
+                        resolve(data.rows[0]);
+                    }
+                })
+            }
         });
     },
     validateEmail: (email) => {
