@@ -1,9 +1,16 @@
 const db = require("../db_connection/index");
+const { validateUUID, saveRequest } = require("../utils/index");
 
 module.exports = {
     // get a random quote
     // can filter by character, episode or season
-    all: (req, res) => {
+    all: async (req, res) => {
+        // check for valid API request before proceeding
+        const { key } = req.body;
+        let userID;
+        await validateUUID(key)
+            .then(res => userID = res.id)
+            .catch(err => res.status(401).send("Invalid API key"));
         const charID = parseInt(req.query.charid);
         const episodeID = parseInt(req.query.episodeid);
         const seasonID = parseInt(req.query.seasonid);
@@ -41,13 +48,17 @@ module.exports = {
         }
         // grab a random quote from the results
         query.text += " ORDER BY RANDOM() LIMIT 1;"
-        db.query(query, (err, data) => {
+        await db.query(query, (err, data) => {
             if (err) {
                 return res.status(500).send(err.message);
             } else if (!data.rows.length) {
-                return res.status(204).send("No results.  Check your parameters and try again");
+                saveRequest(userID)
+                    .then(results => res.status(204).send("No results.  Check your parameters and try again"))
+                    .catch(err => res.status(500));
             } else {
-                return res.status(200).json(data.rows[0]);
+                saveRequest(userID)
+                    .then(results => res.status(200).json(data.rows[0]))
+                    .catch(err => res.status(500).send(err));
             }
         });
     }

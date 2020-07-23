@@ -3,6 +3,6 @@ const controller = require("../../controllers/quotesController");
 
 router
     .route("/all/:charid?/:episodeid?/:season?")
-    .get(controller.all);
+    .post(controller.all);
 
 module.exports = router;

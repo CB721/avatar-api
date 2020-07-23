@@ -38,5 +38,18 @@ module.exports = {
             if (!emailRegex.test(email)) reject(false)
             else resolve(true);
         });
+    },
+    saveRequest: (id) => {
+        return new Promise((resolve, reject) => {
+            if (!id) reject();
+            const query = {
+                text: "INSERT INTO requests (user_id) VALUES ($1);",
+                values: [id]
+            }
+            db.query(query, (err, data) => {
+                if (err) reject(err)
+                else resolve();
+            });
+        });
     }
 }
