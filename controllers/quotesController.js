@@ -53,7 +53,7 @@ module.exports = {
                 return res.status(500).send(err.message);
             } else if (!data.rows.length) {
                 saveRequest(userID)
-                    .then(results => res.status(204).send("No results.  Check your parameters and try again"))
+                    .then(results => res.status(204).send("No results.  Check your parameters and try again."))
                     .catch(err => res.status(500));
             } else {
                 saveRequest(userID)
