@@ -8,6 +8,7 @@ module.exports = {
         const page = req.query.page;
         // if the page param is not a number, return an error
         if (isNaN(page)) return res.status(404).send("You must send a page query parameter");
+        if (page > 13) return res.status(404).send("Page does not exist.  Max page is 13.");
         const offset = (page * 5) - 5;
         const query = {
             text: "SELECT id, title FROM episode ORDER BY id OFFSET $1 ROWS FETCH NEXT 5 ROWS ONLY;",
