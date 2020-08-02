@@ -149,5 +149,146 @@ module.exports = {
             }
         }
         return res.status(200).json(docObj);
+    },
+    all: (req, res) => {
+        const docObj = {
+            characters: {
+                mainRoute: "/characters",
+                requestType: "GET",
+                subRoutes: {
+                    all: {
+                        route: "/all",
+                        params: {
+                            element: {
+                                description: "Option to get list of characters by element",
+                                required: false,
+                                dataType: "integer",
+                                example: "/characters/all/?element=1"
+                            }
+                        },
+                        description: "Get a list of all characters",
+                        example: "/characters/all"
+                    },
+                    one: {
+                        route: "/one",
+                        params: {
+                            id: {
+                                description: "Get full character information by id",
+                                required: true,
+                                dataType: "integer",
+                                example: "/characters/one/?id=1"
+                            }
+                        }
+                    }
+                }
+            },
+            elements: {
+                mainRoute: "/elements",
+                requestType: "GET",
+                subRoutes: {
+                    all: {
+                        route: "/all",
+                        description: "Get a list of all elements",
+                        example: "/elements/all"
+                    }
+                }
+            },
+            episodes: {
+                mainRoute: "/episodes",
+                requestType: "GET",
+                subRoutes: {
+                    all: {
+                        route: "/all",
+                        params: {
+                            page: {
+                                description: "Get a list of 5 episodes by page.",
+                                subDescription: "Last page is 13.",
+                                required: true,
+                                dataType: "integer",
+                                example: "/episodes/all/?page=1"
+                            }
+                        }
+                    },
+                    one: {
+                        route: "/one",
+                        params: {
+                            id: {
+                                description: "Get single episode with name, chapter number and season.",
+                                required: true,
+                                dataType: "integer",
+                                example: "/episodes/one/?id=1"
+                            }
+                        }
+                    }
+                }
+            },
+            quotes: {
+                mainRoute: "/quotes",
+                requestType: "POST",
+                subRoutes: {
+                    all: {
+                        route: "/all",
+                        description: "Get a random quote",
+                        example: "/quotes/all",
+                        body: {
+                            key: {
+                                description: "Your API key",
+                                required: true,
+                                dataType: "string"
+                            }
+                        },
+                        params: {
+                            charid: {
+                                description: "Filter random quote by character id.",
+                                required: false,
+                                dataType: "integer",
+                                example: "/quotes/all/?charid=1"
+                            },
+                            episodeid: {
+                                description: "Filter random quote by episode id.",
+                                required: false,
+                                dataType: "integer",
+                                example: "/quotes/all/?episodeid=1"
+                            },
+                            seasonid: {
+                                description: "Filter random quote by season id.",
+                                required: false,
+                                dataType: "integer",
+                                example: "/quotes/all/?seasonid=1"
+                            }
+                        }
+                    }
+                }
+            },
+            seasons: {
+                mainRoute: "/seasons",
+                requestType: "GET",
+                subRoutes: {
+                    all: {
+                        route: "/all",
+                        params: {
+                            page: {
+                                description: "Get all seasons by title and id.",
+                                required: true,
+                                dataType: "integer",
+                                example: "/seasons/all"
+                            }
+                        }
+                    },
+                    one: {
+                        route: "/one",
+                        params: {
+                            id: {
+                                description: "Get one season with how many total episodes and which series it is in.",
+                                required: true,
+                                dataType: "integer",
+                                example: "/seasons/one/?id=1"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res.status(200).json(docObj);
     }
 }

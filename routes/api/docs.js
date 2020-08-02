@@ -16,5 +16,8 @@ router
 router
     .route("/seasons")
     .get(controller.seasons);
+router
+    .route("/all")
+    .get(controller.all);
 
 module.exports = router;
