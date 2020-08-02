@@ -151,8 +151,8 @@ module.exports = {
         return res.status(200).json(docObj);
     },
     all: (req, res) => {
-        const docObj = {
-            characters: {
+        const docObj = [
+            {
                 mainRoute: "/characters",
                 requestType: "GET",
                 subRoutes: {
@@ -182,7 +182,7 @@ module.exports = {
                     }
                 }
             },
-            elements: {
+            {
                 mainRoute: "/elements",
                 requestType: "GET",
                 subRoutes: {
@@ -193,7 +193,7 @@ module.exports = {
                     }
                 }
             },
-            episodes: {
+            {
                 mainRoute: "/episodes",
                 requestType: "GET",
                 subRoutes: {
@@ -222,7 +222,7 @@ module.exports = {
                     }
                 }
             },
-            quotes: {
+            {
                 mainRoute: "/quotes",
                 requestType: "POST",
                 subRoutes: {
@@ -260,7 +260,7 @@ module.exports = {
                     }
                 }
             },
-            seasons: {
+            {
                 mainRoute: "/seasons",
                 requestType: "GET",
                 subRoutes: {
@@ -288,7 +288,7 @@ module.exports = {
                     }
                 }
             }
-        }
+        ]
         return res.status(200).json(docObj);
     }
 }
