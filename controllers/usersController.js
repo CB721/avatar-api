@@ -53,11 +53,13 @@ module.exports = {
         await db.query(query, (err, data) => {
             if (err) {
                 return res.status(500).send(err.message);
-            } else if (!data.rows.length) {
-                return res.status(404).send("User not found");
-            } else {
-                return res.status(201).json(data.rows[0]);
-            }
+            } 
+            console.log(data.rows);
+            // else if (!data.rows.length) {
+            //     return res.status(404).send("User not found");
+            // } else {
+            //     return res.status(201).json(data.rows[0]);
+            // }
         });
     },
     // delete user
