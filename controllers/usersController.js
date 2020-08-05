@@ -47,19 +47,17 @@ module.exports = {
             .catch(err => res.status(401).send("Invalid email"));
         // query to update the user key, it will return the new key to the user
         const query = {
-            text: "UPDATE users SET api_key = uuid_generate_v4 () WHERE id = $1;",
+            text: "UPDATE users SET api_key = uuid_generate_v4 () WHERE id = $1 RETURNING api_key;",
             values: [userID]
         }
         await db.query(query, (err, data) => {
             if (err) {
                 return res.status(500).send(err.message);
-            } 
-            console.log(data.rows);
-            // else if (!data.rows.length) {
-            //     return res.status(404).send("User not found");
-            // } else {
-            //     return res.status(201).json(data.rows[0]);
-            // }
+            } else if (!data.rows.length) {
+                return res.status(404).send("User not found");
+            } else {
+                return res.status(201).json(data.rows[0]);
+            }
         });
     },
     // delete user
