@@ -37,12 +37,10 @@ module.exports = {
         if (!email || !key) return res.status(400).send("Email and API key required");
         // add to user id when the api key is validated
         let userID = 0;
-        console.log(userID);
         // check if the key is a valid uuid
         await validateUUID(key)
             .then(res => userID = res)
             .catch(err => res.status(401).send("Invalid API key"));
-        console.log(userID);
         // check if email is valid
         await validateEmail(email)
             .then()
@@ -52,6 +50,7 @@ module.exports = {
             text: "UPDATE users SET api_key = uuid_generate_v4 () WHERE id = $1;",
             values: [userID]
         }
+        console.log(query);
         await db.query(query, (err, data) => {
             if (err) {
                 return res.status(500).send(err.message);
