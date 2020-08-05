@@ -7,6 +7,6 @@ router
     .patch(controller.newKey);
 router
     .route("/remove")
-    .delete(controller.delete);
+    .post(controller.delete);
 
 module.exports = router;
