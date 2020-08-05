@@ -5,12 +5,15 @@ const { validateUUID, validateEmail } = require("../utils/index");
 module.exports = {
     // create a new user
     create: (req, res) => {
-        const { first_name, last_name, email } = req.body;
+        let { first_name, last_name, email } = req.body;
         validateEmail(email)
             .then()
             .catch(err => res.status(401).send("Invalid email"));
         // check if both a first and last name were submitted
         if (!first_name || !last_name) return res.status(400).send("First and last name are required");
+        // change names to lowercase
+        first_name = first_name.toLowerCase();
+        last_name = last_name.toLowerCase();
         // once a user is successfully added, the generated api key will be sent back
         const query = {
             text: "INSERT INTO users(first_name, last_name, email) VALUES($1, $2, $3) RETURNING api_key;",
@@ -28,18 +31,18 @@ module.exports = {
         });
     },
     // specific route for requesting a new key
-    newKey: (req, res) => {
+    newKey: async(req, res) => {
         // since all emails will be unique, we can look up the user by email and api key
         const { email, key } = req.body;
         if (!email || !key) return res.status(400).send("Email and API key required");
         // add to user id when the api key is validated
         let userID = 0;
         // check if the key is a valid uuid
-        validateUUID(key)
+        await validateUUID(key)
             .then(res => userID = res)
             .catch(err => res.status(401).send("Invalid API key"));
         // check if email is valid
-        validateEmail(email)
+        await validateEmail(email)
             .then()
             .catch(err => res.status(401).send("Invalid email"));
         // query to update the user key, it will return the new key to the user
@@ -47,7 +50,7 @@ module.exports = {
             text: "UPDATE users SET api_key = uuid_generate_v4 () WHERE id = $1;",
             values: [userID]
         }
-        db.query(query, (err, data) => {
+        await db.query(query, (err, data) => {
             if (err) {
                 return res.status(500).send(err.message);
             } else if (!data.rows.length) {
@@ -58,16 +61,16 @@ module.exports = {
         });
     },
     // delete user
-    delete: (req, res) => {
+    delete: async(req, res) => {
         // expecting email and api key
         const { email, key } = req.body;
         if (!email || !key) return res.status(400).send("Email and API key required");
         // check if the key is a valid uuid
-        validateUUID(key)
+        await validateUUID(key)
             .then()
             .catch(err => res.status(401).send("Invalid API key"));
         // check if email is valid
-        validateEmail(email)
+        await validateEmail(email)
             .then()
             .catch(err => res.status(401).send("Invalid email"));
         // query to delete user
@@ -75,7 +78,7 @@ module.exports = {
             text: "DELETE FROM users WHERE email = $1 AND api_key = $2;",
             values: [email, key]
         }
-        db.query(query, (err, data) => {
+        await db.query(query, (err, data) => {
             if (err) {
                 return res.status(500).send(err.message);
             } else {
