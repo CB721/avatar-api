@@ -50,7 +50,6 @@ module.exports = {
             text: "UPDATE users SET api_key = uuid_generate_v4 () WHERE id = $1;",
             values: [userID]
         }
-        console.log(query);
         await db.query(query, (err, data) => {
             if (err) {
                 return res.status(500).send(err.message);

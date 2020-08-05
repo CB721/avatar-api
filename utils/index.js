@@ -23,7 +23,7 @@ module.exports = {
                     } else if (!data.rows.length) {
                         reject (false);
                     } else {
-                        resolve(data.rows[0]);
+                        resolve(data.rows[0].id);
                     }
                 })
             }
