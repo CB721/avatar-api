@@ -90,6 +90,7 @@ module.exports = {
                     body: {
                         key: {
                             description: "Your API key",
+                            subDescription: "A new quote will only be sent every minute.",
                             required: true,
                             dataType: "string"
                         }

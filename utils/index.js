@@ -1,4 +1,5 @@
 const db = require("../db_connection/index");
+const cache = require("memory-cache");
 module.exports = {
     validateUUID: (uuid) => {
         return new Promise((resolve, reject) => {
@@ -10,6 +11,10 @@ module.exports = {
             if (!regex.test(uuid)) reject(false)
             // otherwise, check the database to see if one can be found
             else {
+                // check cache for previously verified user
+                const cachedUser = cache.get(`user_${uuid}`);
+                // if a user has been verified, return the cached id
+                if (cachedUser) resolve(cachedUser);
                 // query to find the api key and return the user id
                 const query = {
                     text: "SELECT id FROM users WHERE api_key = $1;",
@@ -23,7 +28,9 @@ module.exports = {
                     } else if (!data.rows.length) {
                         reject(false);
                     } else {
-                        resolve(data.rows[0].id);
+                        // save data to cache for one minute
+                        cache.put(`user_${uuid}`, data.rows[0]);
+                        resolve(data.rows[0]);
                     }
                 })
             }
