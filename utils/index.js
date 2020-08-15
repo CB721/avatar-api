@@ -18,10 +18,10 @@ module.exports = {
                 db.query(query, (err, data) => {
                     if (err) {
                         // if there is an error, reject it
-                        reject (false);
+                        reject(false);
                         // if no rows were found, reject it
                     } else if (!data.rows.length) {
-                        reject (false);
+                        reject(false);
                     } else {
                         resolve(data.rows[0].id);
                     }
@@ -51,5 +51,12 @@ module.exports = {
                 else resolve();
             });
         });
+    },
+    createCacheKey: (table, ...filters) => {
+        let keys = "";
+        filters.forEach(filter => {
+            keys += Object.entries(filter).join("_");
+        })
+        return `${table}_${keys}`;
     }
 }

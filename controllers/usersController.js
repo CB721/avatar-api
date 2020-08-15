@@ -64,7 +64,6 @@ module.exports = {
     delete: async(req, res) => {
         // expecting email and api key
         const { email, key } = req.body;
-        console.log(req.body);
         if (!email || !key) return res.status(400).send("Email and API key required");
         // check if the key is a valid uuid
         await validateUUID(key)
