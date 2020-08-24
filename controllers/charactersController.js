@@ -9,10 +9,9 @@ module.exports = {
         const elementID = req.query.element;
         let queryStr = "SELECT id, char_name FROM character"
         if (elementID && elementID > 0 && elementID < 10) {
-            queryStr += ` WHERE can_bend @> ARRAY[${elementID}]::SMALLINT[];`
-        } else {
-            queryStr += ";";
+            queryStr += ` WHERE can_bend @> ARRAY[${elementID}]::SMALLINT[]`
         }
+        queryStr += " ORDER BY id;";
         // check cache for saved data
         const savedCache = cache.get(createCacheKey("char", { elementID }));
         // if something is saved, return the saved data
