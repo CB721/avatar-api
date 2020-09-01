@@ -1,13 +1,18 @@
 const db = require("../db_connection/index");
 const cache = require("memory-cache");
-const { validateUUID, saveRequest, createCacheKey } = require("../utils/index");
+const { validateUUID, saveRequest, createCacheKey, sendRes } = require("../utils/index");
 
 module.exports = {
     // get a random quote
     // can filter by character, episode or season
     all: async (req, res) => {
+        // get the content-type from the request
+        const contentType = req.accepts(['json', 'application/json']);
+        // if json was not requested, send back error
+        if (!contentType) return res.status(406).send('Not Acceptable');
         // check for valid API request before proceeding
-        const { key } = req.body;
+        const key = req.get('key');
+        if (!key) return res.status(401).send("Invalid API key");
         let userID;
         await validateUUID(key)
             .then(res => userID = res.id)
@@ -17,8 +22,8 @@ module.exports = {
         const seasonID = parseInt(req.query.seasonid);
         // check cache for no results response
         const noResponseCache = cache.get(createCacheKey("quote", { charID }, { episodeID }, { seasonID }));
-        // if something is saved, return the response
-        if (noResponseCache) return res.status(200).send(noResponseCache);
+        // if something is saved, return the no results response
+        if (noResponseCache) return res.status(200).json(noResponseCache);
         // check cache for saved data
         const savedCache = cache.get(createCacheKey("quote", { key }, { charID }, { episodeID }, { seasonID }));
         // if something is saved, return the saved data
@@ -59,23 +64,24 @@ module.exports = {
         query.text += " ORDER BY RANDOM() LIMIT 1;"
         await db.query(query, (err, data) => {
             if (err) {
-                return res.status(500).send(err.message);
+                return sendRes(res, err.message, 500);
             } else if (!data.rows.length) {
                 saveRequest(userID)
-                    .then(results => {
+                    .then(() => {
                         // save data to cache
                         cache.put(createCacheKey("quote", { charID }, { episodeID }, { seasonID }), "No results.  Check your parameters and try again.");
                         res.status(204).send("No results.  Check your parameters and try again.");
                     })
-                    .catch(err => res.status(500));
+                    .catch(err => sendRes(res, err, 500));
             } else {
                 saveRequest(userID)
-                    .then(results => {
+                    .then(() => {
                         // save data to cache for one minute
                         cache.put(createCacheKey("quote", { key }, { charID }, { episodeID }, { seasonID }), data.rows[0], 60000);
-                        res.status(200).json(data.rows[0]);
+                        // send response
+                        sendRes(res, data.rows[0], 200);
                     })
-                    .catch(err => res.status(500).send(err));
+                    .catch(err => sendRes(res, err, 500));
             }
         });
     }

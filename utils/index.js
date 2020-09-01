@@ -65,5 +65,15 @@ module.exports = {
             keys += Object.entries(filter).join("_");
         })
         return `${table}_${keys}`;
+    },
+    sendRes: (res, data, status) => {
+        res.format({
+            'application/json': () => {
+                res.status(status).send(data)
+            },
+            'json': () => {
+                res.status(status).send(data)
+            }
+        })
     }
 }

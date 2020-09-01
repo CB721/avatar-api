@@ -84,9 +84,9 @@ module.exports = {
             requestType: "POST",
             subRoutes: {
                 all: {
-                    route: "/all",
+                    route: "/sample",
                     description: "Get a random quote",
-                    example: "/quotes/all",
+                    example: "/quotes/sample",
                     body: {
                         key: {
                             description: "Your API key",
@@ -100,19 +100,19 @@ module.exports = {
                             description: "Filter random quote by character id.",
                             required: false,
                             dataType: "integer",
-                            example: "/quotes/all/?charid=1"
+                            example: "/quotes/sample/?charid=1"
                         },
                         episodeid: {
                             description: "Filter random quote by episode id.",
                             required: false,
                             dataType: "integer",
-                            example: "/quotes/all/?episodeid=1"
+                            example: "/quotes/sample/?episodeid=1"
                         },
                         seasonid: {
                             description: "Filter random quote by season id.",
                             required: false,
                             dataType: "integer",
-                            example: "/quotes/all/?seasonid=1"
+                            example: "/quotes/sample/?seasonid=1"
                         }
                     }
                 }
