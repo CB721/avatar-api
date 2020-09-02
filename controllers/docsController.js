@@ -130,22 +130,11 @@ module.exports = {
                 all: {
                     route: "/all",
                     params: {
-                        page: {
-                            description: "Get all seasons by title and id.",
-                            required: true,
-                            dataType: "integer",
-                            example: "/seasons/all"
-                        }
-                    }
-                },
-                one: {
-                    route: "/one",
-                    params: {
                         id: {
                             description: "Get one season with how many total episodes and which series it is in.",
                             required: true,
                             dataType: "integer",
-                            example: "/seasons/one/?id=1"
+                            example: "/seasons/all/?id=1"
                         }
                     }
                 }
@@ -154,17 +143,6 @@ module.exports = {
         sendRes(res, docObj, 200);
     },
     all: async (req, res) => {
-        // get the content-type from the request
-        const contentType = req.accepts(['json', 'application/json']);
-        // if json was not requested, send back error
-        if (!contentType) return res.status(406).send('Not Acceptable');
-        // check for valid API request before proceeding
-        const key = req.get('key');
-        if (!key) return res.status(401).send("Invalid API key");
-        let userID;
-        await validateUUID(key)
-            .then(res => userID = res.id)
-            .catch(err => res.status(401).send("Invalid API key"));
         const docObj = [
             {
                 mainRoute: "/characters",
@@ -282,22 +260,11 @@ module.exports = {
                     all: {
                         route: "/all",
                         params: {
-                            page: {
-                                description: "Get all seasons by title and id.",
-                                required: true,
-                                dataType: "integer",
-                                example: "/seasons/all"
-                            }
-                        }
-                    },
-                    one: {
-                        route: "/one",
-                        params: {
                             id: {
                                 description: "Get one season with how many total episodes and which series it is in.",
                                 required: true,
                                 dataType: "integer",
-                                example: "/seasons/one/?id=1"
+                                example: "/seasons/all/?id=1"
                             }
                         }
                     }
