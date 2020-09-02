@@ -1,6 +1,6 @@
 const db = require("../db_connection/index");
 const cache = require("memory-cache");
-const { createCacheKey } = require("../utils");
+const { createCacheKey, sendRes } = require("../utils");
 
 module.exports = {
     // get all elements
@@ -15,7 +15,7 @@ module.exports = {
             } else {
                 // save data to cache
                 cache.put(createCacheKey("ele"), data.rows);
-                return res.status(200).json(data.rows);
+                sendRes(res, data.rows, 200);
             }
         });
     }
