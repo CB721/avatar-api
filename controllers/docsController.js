@@ -58,10 +58,10 @@ module.exports = {
                     params: {
                         page: {
                             description: "Get a list of 5 episodes by page.",
-                            subDescription: "Last page is 13.",
+                            subDescription: "Last page is 23.",
                             required: true,
                             dataType: "integer",
-                            example: "/episodes/all/?page=1"
+                            example: "/episodes/all/3"
                         }
                     }
                 },
@@ -194,10 +194,10 @@ module.exports = {
                         params: {
                             page: {
                                 description: "Get a list of 5 episodes by page.",
-                                subDescription: "Last page is 13.",
+                                subDescription: "Last page is 23.",
                                 required: true,
                                 dataType: "integer",
-                                example: "/episodes/all/?page=1"
+                                example: "/episodes/all/3"
                             }
                         }
                     },

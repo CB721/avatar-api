@@ -7,10 +7,10 @@ module.exports = {
     all: (req, res) => {
         // each page of episodes will contain 5
         // there are currently 61 episodes - would be more if the second series is added
-        const page = req.query.page;
+        const page = req.params.page;
         // if the page param is not a number, return an error
         if (isNaN(page)) return res.status(404).send("You must send a page query parameter");
-        if (page > 13) return res.status(404).send("Page does not exist.  Max page is 13.");
+        if (page > 23) return res.status(404).send("Page does not exist.  Max page is 23.");
         // check cache for saved data
         const savedCache = cache.get(createCacheKey("epi", { page }));
         // if something is saved, return the saved data
