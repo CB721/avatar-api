@@ -1,6 +1,6 @@
 const db = require("../db_connection/index");
 const cache = require("memory-cache");
-const { createCacheKey } = require("../utils");
+const { createCacheKey, sendRes } = require("../utils");
 
 module.exports = {
     // get all characters by name and id
@@ -22,7 +22,7 @@ module.exports = {
             } else {
                 // save data to cache
                 cache.put(createCacheKey("char", { elementID }), data.rows);
-                return res.status(200).json(data.rows);
+                sendRes(res, data.rows, 200);
             }
         });
     },
@@ -40,16 +40,16 @@ module.exports = {
         }
         db.query(query, (err, data) => {
             if (err) {
-                return res.status(500).send(err.message);
+                sendRes(res, { error: err.message }, 500);
             } else if (!data.rows.length) {
-                return res.status(204).send("Invalid character ID");
+                sendRes(res, { error: "Invalid character ID" }, 204);
             } else {
                 // add legal jargon to character object
                 const charObj = data.rows[0];
                 charObj["copyright"] = "All images belong their respective owners. Do not use for commercial purposes.";
                 // save data to cache
                 cache.put(createCacheKey("char", { ID }), data.rows[0]);
-                return res.status(200).json(data.rows[0]);
+                sendRes(res, data.rows[0], 200);
             }
         });
     }

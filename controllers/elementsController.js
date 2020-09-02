@@ -11,7 +11,7 @@ module.exports = {
         if (savedCache) return res.status(200).json(savedCache);
         db.query("SELECT * FROM element;", (err, data) => {
             if (err) {
-                return res.status(500).send(err.message);
+                sendRes(res, { error: err.message }, 500);
             } else {
                 // save data to cache
                 cache.put(createCacheKey("ele"), data.rows);

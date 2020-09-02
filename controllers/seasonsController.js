@@ -20,9 +20,9 @@ module.exports = {
             }
             db.query(query, (err, data) => {
                 if (err) {
-                    return res.status(500).send(err.message);
+                    sendRes(res, { error: err.message }, 500);
                 } else if (!data.rows.length) {
-                    return res.status(204).send("Invalid season ID");
+                    sendRes(res, { error: "Invalid season ID" }, 204);
                 } else {
                     // save data to cache
                     cache.put(createCacheKey("sea", { ID }), data.rows[0]);
@@ -36,7 +36,7 @@ module.exports = {
             if (savedCache) return res.status(200).json(savedCache);
             db.query("SELECT season_num, title FROM season;", (err, data) => {
                 if (err) {
-                    return res.status(500).send(err.message);
+                    sendRes(res, { error: err.message }, 500);
                 } else {
                     // save data to cache
                     cache.put(createCacheKey("sea"), data.rows);

@@ -1,5 +1,5 @@
 const db = require("../db_connection/index");
-const { validateUUID, validateEmail } = require("../utils/index");
+const { validateUUID, validateEmail, sendRes } = require("../utils/index");
 
 // all requests to these routes must come from a whitelisted source
 module.exports = {
@@ -22,16 +22,16 @@ module.exports = {
         db.query(query, (err, data) => {
             // if the email submitted already exists, send an error
             if (err && err.message === `duplicate key value violates unique constraint "users_email_key"`) {
-                return res.status(409).send("Email already exists");
+                sendRes(res, { error: "Email already exists" }, 409);
             } else if (err) {
-                return res.status(500).send(err.message);
+                sendRes(res, { error: err.message }, 500);
             } else {
-                return res.status(200).json(data.rows[0]);
+                sendRes(res, data.rows[0], 200);
             }
         });
     },
     // specific route for requesting a new key
-    newKey: async(req, res) => {
+    newKey: async (req, res) => {
         // since all emails will be unique, we can look up the user by email and api key
         const { email, key } = req.body;
         if (!email || !key) return res.status(400).send("Email and API key required");
@@ -52,16 +52,16 @@ module.exports = {
         }
         await db.query(query, (err, data) => {
             if (err) {
-                return res.status(500).send(err.message);
+                sendRes(res, { error: err.message }, 500);
             } else if (!data.rows.length) {
-                return res.status(404).send("User not found");
+                sendRes(res, { error: "User not found" }, 404);
             } else {
-                return res.status(201).json(data.rows[0]);
+                sendRes(res, data.rows[0], 201);
             }
         });
     },
     // delete user
-    delete: async(req, res) => {
+    delete: async (req, res) => {
         // expecting email and api key
         const { email, key } = req.body;
         if (!email || !key) return res.status(400).send("Email and API key required");
@@ -80,9 +80,9 @@ module.exports = {
         }
         await db.query(query, (err, data) => {
             if (err) {
-                return res.status(500).send(err.message);
+                sendRes(res, { error: err.message }, 500);
             } else {
-                return res.status(204).send("User account deleted");
+                sendRes(res, { message: "User account deleted" }, 204);
             }
         });
     }

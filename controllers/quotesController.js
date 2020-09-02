@@ -64,7 +64,7 @@ module.exports = {
         query.text += " ORDER BY RANDOM() LIMIT 1;"
         await db.query(query, (err, data) => {
             if (err) {
-                return sendRes(res, err.message, 500);
+                sendRes(res, { error: err.message }, 500);
             } else if (!data.rows.length) {
                 saveRequest(userID)
                     .then(() => {

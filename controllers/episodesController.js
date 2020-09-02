@@ -22,7 +22,7 @@ module.exports = {
         }
         db.query(query, (err, data) => {
             if (err) {
-                return res.status(500).send(err.message);
+                sendRes(res, { error: err.message }, 500);
             } else {
                 // save data to cache
                 cache.put(createCacheKey("epi", { page }), data.rows);
@@ -44,9 +44,9 @@ module.exports = {
         }
         db.query(query, (err, data) => {
             if (err) {
-                return res.status(500).send(err.message);
+                sendRes(res, { error: err.message }, 500);
             } else if (!data.rows.length) {
-                return res.status(204).send("Invalid episode ID");
+                sendRes(res, { error: "Invalid episode ID" }, 204);
             } else {
                 // save data to cache
                 cache.put(createCacheKey("epi", { ID }), data.rows[0]);
