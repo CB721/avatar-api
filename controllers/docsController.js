@@ -1,3 +1,5 @@
+const { sendRes, validateUUID } = require("../utils/index");
+
 module.exports = {
     characters: (req, res) => {
         const docObj = {
@@ -30,7 +32,7 @@ module.exports = {
                 }
             }
         }
-        return res.status(200).json(docObj);
+        sendRes(res, docObj, 200);
     },
     elements: (req, res) => {
         const docObj = {
@@ -44,7 +46,7 @@ module.exports = {
                 }
             }
         }
-        return res.status(200).json(docObj);
+        sendRes(res, docObj, 200);
     },
     episodes: (req, res) => {
         const docObj = {
@@ -76,18 +78,18 @@ module.exports = {
                 }
             }
         }
-        return res.status(200).json(docObj);
+        sendRes(res, docObj, 200);
     },
     quotes: (req, res) => {
         const docObj = {
             mainRoute: "/quotes",
-            requestType: "POST",
+            requestType: "GET",
             subRoutes: {
                 all: {
                     route: "/sample",
                     description: "Get a random quote",
                     example: "/quotes/sample",
-                    body: {
+                    headers: {
                         key: {
                             description: "Your API key",
                             subDescription: "A new quote will only be sent every minute.",
@@ -118,7 +120,7 @@ module.exports = {
                 }
             }
         }
-        return res.status(200).json(docObj);
+        sendRes(res, docObj, 200);
     },
     seasons: (req, res) => {
         const docObj = {
@@ -149,9 +151,20 @@ module.exports = {
                 }
             }
         }
-        return res.status(200).json(docObj);
+        sendRes(res, docObj, 200);
     },
-    all: (req, res) => {
+    all: async (req, res) => {
+        // get the content-type from the request
+        const contentType = req.accepts(['json', 'application/json']);
+        // if json was not requested, send back error
+        if (!contentType) return res.status(406).send('Not Acceptable');
+        // check for valid API request before proceeding
+        const key = req.get('key');
+        if (!key) return res.status(401).send("Invalid API key");
+        let userID;
+        await validateUUID(key)
+            .then(res => userID = res.id)
+            .catch(err => res.status(401).send("Invalid API key"));
         const docObj = [
             {
                 mainRoute: "/characters",
@@ -225,15 +238,16 @@ module.exports = {
             },
             {
                 mainRoute: "/quotes",
-                requestType: "POST",
+                requestType: "GET",
                 subRoutes: {
-                    all: {
-                        route: "/all",
+                    sample: {
+                        route: "/sample",
                         description: "Get a random quote",
-                        example: "/quotes/all",
-                        body: {
+                        example: "/quotes/sample",
+                        headers: {
                             key: {
                                 description: "Your API key",
+                                subDescription: "A new quote will only be sent every minute.",
                                 required: true,
                                 dataType: "string"
                             }
@@ -243,19 +257,19 @@ module.exports = {
                                 description: "Filter random quote by character id.",
                                 required: false,
                                 dataType: "integer",
-                                example: "/quotes/all/?charid=1"
+                                example: "/quotes/sample/?charid=1"
                             },
                             episodeid: {
                                 description: "Filter random quote by episode id.",
                                 required: false,
                                 dataType: "integer",
-                                example: "/quotes/all/?episodeid=1"
+                                example: "/quotes/sample/?episodeid=1"
                             },
                             seasonid: {
                                 description: "Filter random quote by season id.",
                                 required: false,
                                 dataType: "integer",
-                                example: "/quotes/all/?seasonid=1"
+                                example: "/quotes/sample/?seasonid=1"
                             }
                         }
                     }
@@ -290,6 +304,6 @@ module.exports = {
                 }
             }
         ]
-        return res.status(200).json(docObj);
+        sendRes(res, docObj, 200);
     }
 }

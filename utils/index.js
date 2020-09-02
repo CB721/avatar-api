@@ -66,7 +66,7 @@ module.exports = {
         })
         return `${table}_${keys}`;
     },
-    sendRes: (res, data, status) => {
+    sendRes: (res, data, status = 200) => {
         res.format({
             'application/json': () => {
                 res.status(status).send(data)
