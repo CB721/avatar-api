@@ -39,12 +39,13 @@ module.exports = {
         let userID = 0;
         // check if the key is a valid uuid
         await validateUUID(key)
-            .then(res => userID = res)
-            .catch(err => res.status(401).send("Invalid API key"));
+            .then(res => userID = res.id)
+            .catch(() => res.status(401).send("Invalid API key"));
+        if (userID === 0) return;
         // check if email is valid
         await validateEmail(email)
             .then()
-            .catch(err => res.status(401).send("Invalid email"));
+            .catch(() => res.status(401).send("Invalid email"));
         // query to update the user key, it will return the new key to the user
         const query = {
             text: "UPDATE users SET api_key = uuid_generate_v4 () WHERE id = $1 RETURNING api_key;",
@@ -68,11 +69,11 @@ module.exports = {
         // check if the key is a valid uuid
         await validateUUID(key)
             .then()
-            .catch(err => res.status(401).send("Invalid API key"));
+            .catch(() => res.status(401).send("Invalid API key"));
         // check if email is valid
         await validateEmail(email)
             .then()
-            .catch(err => res.status(401).send("Invalid email"));
+            .catch(() => res.status(401).send("Invalid email"));
         // query to delete user
         const query = {
             text: "DELETE FROM users WHERE email = $1 AND api_key = $2;",

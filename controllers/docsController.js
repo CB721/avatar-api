@@ -1,4 +1,4 @@
-const { sendRes, validateUUID } = require("../utils/index");
+const { sendRes } = require("../utils/index");
 
 module.exports = {
     characters: (req, res) => {
