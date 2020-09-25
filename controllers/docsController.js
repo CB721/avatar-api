@@ -218,7 +218,7 @@ module.exports = {
                 mainRoute: "/quotes",
                 requestType: "GET",
                 subRoutes: {
-                    sample: {
+                    all: {
                         route: "/sample",
                         description: "Get a random quote",
                         example: "/quotes/sample",
