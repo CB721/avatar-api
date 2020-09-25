@@ -20,13 +20,13 @@ module.exports = {
                     example: "/characters/all"
                 },
                 one: {
-                    route: "/one",
+                    route: "/sample",
                     params: {
                         id: {
                             description: "Get full character information by id",
                             required: true,
                             dataType: "integer",
-                            example: "/characters/one/?id=1"
+                            example: "/characters/sample/?id=1"
                         }
                     }
                 }
@@ -66,13 +66,13 @@ module.exports = {
                     }
                 },
                 one: {
-                    route: "/one",
+                    route: "/sample",
                     params: {
                         id: {
                             description: "Get single episode with name, chapter number and season.",
                             required: true,
                             dataType: "integer",
-                            example: "/episodes/one/?id=1"
+                            example: "/episodes/sample/12"
                         }
                     }
                 }
@@ -164,13 +164,13 @@ module.exports = {
                         example: "/characters/all"
                     },
                     one: {
-                        route: "/one",
+                        route: "/sample",
                         params: {
                             id: {
                                 description: "Get full character information by id",
                                 required: true,
                                 dataType: "integer",
-                                example: "/characters/one/?id=1"
+                                example: "/characters/sample/?id=1"
                             }
                         }
                     }
@@ -204,13 +204,13 @@ module.exports = {
                         }
                     },
                     one: {
-                        route: "/one",
+                        route: "/sample",
                         params: {
                             id: {
                                 description: "Get single episode with name, chapter number and season.",
                                 required: true,
                                 dataType: "integer",
-                                example: "/episodes/one/23"
+                                example: "/episodes/sample/23"
                             }
                         }
                     }

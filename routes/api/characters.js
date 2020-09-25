@@ -5,7 +5,7 @@ router
     .route("/all/:element?")
     .get(controller.all);
 router
-    .route("/one/:id?")
+    .route("/sample/:id?")
     .get(controller.one);
 
 module.exports = router;
