@@ -77,7 +77,7 @@ module.exports = {
                 saveRequest(userID)
                     .then(() => {
                         // save data to cache for one minute
-                        cache.put(createCacheKey("quote", { key }, { charID }, { episodeID }, { seasonID }), data.rows[0], 60000);
+                        cache.put(createCacheKey("quote", { key }, { charID }, { episodeID }, { seasonID }), [data.rows[0]], 60000);
                         // send response
                         sendRes(res, data.rows[0], 200);
                     })

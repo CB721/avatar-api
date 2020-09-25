@@ -46,7 +46,7 @@ module.exports = {
             } else {
                 // add legal jargon to character object
                 const charObj = data.rows[0];
-                charObj["copyright"] = "All images belong their respective owners. Do not use for commercial purposes.";
+                charObj["copyright"] = "All images belong to their respective owners. Do not use for commercial purposes.";
                 // save data to cache
                 cache.put(createCacheKey("char", { ID }), data.rows[0]);
                 sendRes(res, data.rows[0], 200);

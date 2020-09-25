@@ -129,9 +129,11 @@ module.exports = {
             subRoutes: {
                 all: {
                     route: "/all",
+                    description: "Get a list of all of the seasons in the series.",
                     params: {
                         id: {
                             description: "Get one season with how many total episodes and which series it is in.",
+                            subDescription: "There are a total of 7 seasons.",
                             required: true,
                             dataType: "integer",
                             example: "/seasons/all/?id=1"
@@ -208,7 +210,7 @@ module.exports = {
                                 description: "Get single episode with name, chapter number and season.",
                                 required: true,
                                 dataType: "integer",
-                                example: "/episodes/one/?id=1"
+                                example: "/episodes/one/23"
                             }
                         }
                     }
@@ -259,9 +261,11 @@ module.exports = {
                 subRoutes: {
                     all: {
                         route: "/all",
+                        description: "Get a list of all of the seasons in the series.",
                         params: {
                             id: {
                                 description: "Get one season with how many total episodes and which series it is in.",
+                                subDescription: "There are a total of 7 seasons.",
                                 required: true,
                                 dataType: "integer",
                                 example: "/seasons/all/?id=1"

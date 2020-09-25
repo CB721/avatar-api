@@ -1,6 +1,6 @@
 const db = require("../db_connection/index");
 const cache = require("memory-cache");
-const { createCacheKey } = require("../utils");
+const { createCacheKey, sendRes } = require("../utils");
 
 module.exports = {
     // get a list of all episodes with the name and id
@@ -32,7 +32,7 @@ module.exports = {
     },
     // get single episode with name, chapter number and season
     one: (req, res) => {
-        const ID = req.query.id;
+        const ID = req.params.id;
         if (isNaN(ID)) return res.status(400).send("Episode ID required");
         // check cache for saved data
         const savedCache = cache.get(createCacheKey("epi", { ID }));

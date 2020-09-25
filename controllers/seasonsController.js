@@ -25,7 +25,7 @@ module.exports = {
                     sendRes(res, { error: "Invalid season ID" }, 204);
                 } else {
                     // save data to cache
-                    cache.put(createCacheKey("sea", { ID }), data.rows[0]);
+                    cache.put(createCacheKey("sea", { ID }), [data.rows[0]]);
                     sendRes(res, data.rows[0], 200);
                 }
             });

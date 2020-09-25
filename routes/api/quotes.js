@@ -3,7 +3,7 @@ const controller = require("../../controllers/quotesController");
 
 router
 // change route from all to sample
-    .route("/sample/:charid?/:episodeid?/:season?")
+    .route("/sample/:charid?/:season?/:episodeid?")
     .get(controller.all);
 
 module.exports = router;
