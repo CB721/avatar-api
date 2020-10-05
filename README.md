@@ -1,5 +1,5 @@
 # Avatar: The Last API
-A REST API to retreive information on the TV shows [Avatar: The Last Airbender](https://en.wikipedia.org/wiki/Avatar:_The_Last_Airbender) and [Avatar: The Legend of Korra](https://en.wikipedia.org/wiki/The_Legend_of_Korra).  Users can get information on characters, episodes, seasons as well quotes.
+A REST API to retrieve information on the TV shows [Avatar: The Last Airbender](https://en.wikipedia.org/wiki/Avatar:_The_Last_Airbender) and [Avatar: The Legend of Korra](https://en.wikipedia.org/wiki/The_Legend_of_Korra).  Users can get information on characters, episodes, seasons as well as quotes.
 
 * [Documentation Page](https://avatar-the-last-api.herokuapp.com/)
 
